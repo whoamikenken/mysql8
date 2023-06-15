@@ -1,9 +1,14 @@
 version: '3.1'
 
 services:
-
   db:
-    image: pos-db:v1
-    restart: always
+    build:
+      context: ./           # Path to the directory containing the Dockerfile
+      dockerfile: Dockerfile # Name of the Dockerfile
+    # restart: always
+    volumes:
+      - ./docker/my.cnf:/etc/my.cnf
+      # - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./data:/var/lib/mysql
     ports:
       - 3309:3306
