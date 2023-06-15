@@ -1,0 +1,49 @@
+name: Build Image to SWR
+
+on:
+  push:
+    tags:
+      - '*'
+
+env:
+  SWR_REGISTRY: swr.ap-southeast-3.myhuaweicloud.com   # Huawei Cloud SWR registry URL, e.g., swr.ap-southeast-1.myhuaweicloud.com
+  SWR_NAMESPACE: ap-southeast-3 # SWR namespace or project ID
+  SWR_IMAGE_NAME: pos-db # Name of the Docker image in SWR
+  SWR_LOGIN_KEY: ${{ secrets.SWR_LOGIN_KEY }}
+  SWR_AK_KEY: ${{ secrets.SWR_AK_KEY }}
+  SWR_ORGANIZATION: container-pti
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }} # Docker Hub username
+  DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }} # Docker Hub password
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_TOKEN }}
+      
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: false
+        tags: ${{ env.SWR_IMAGE_NAME }}:${{github.ref_name}}
+      
+    - name: Login to SWR HUAWEI
+      run: |
+        docker login -u ${{ env.SWR_NAMESPACE }}@${{ env.SWR_AK_KEY }} -p ${{ env.SWR_LOGIN_KEY }} ${{ env.SWR_REGISTRY }}
+      
+    - name: Add SWR TAG
+      run: |
+        docker tag ${{ env.SWR_IMAGE_NAME }}:${{github.ref_name}} ${{ env.SWR_REGISTRY }}/${{ env.SWR_ORGANIZATION }}/${{ env.SWR_IMAGE_NAME }}:${{github.ref_name}}
+
+    - name: PUSH SWR 
+      run: |
+        docker push ${{ env.SWR_REGISTRY }}/${{ env.SWR_ORGANIZATION }}/${{ env.SWR_IMAGE_NAME }}:${{github.ref_name}}
