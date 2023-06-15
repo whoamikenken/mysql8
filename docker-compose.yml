@@ -7,8 +7,8 @@ services:
       dockerfile: Dockerfile # Name of the Dockerfile
     # restart: always
     volumes:
-      # - ./docker/my.cnf:/etc/my.cnf
-      # - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./docker/my.cnf:/etc/my.cnf
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./data:/var/lib/mysql
     ports:
       - 3309:3306
