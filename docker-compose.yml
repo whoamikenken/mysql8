@@ -11,9 +11,9 @@ services:
       # - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./data:/var/lib/mysql
     ports:
-      - 33025:3306
+      - 3307:3306
     environment:
-      MYSQL_ROOT_PASSWORD: PT1K3n2022
+      MYSQL_ROOT_PASSWORD: passwrd
       MYSQL_DATABASE: moodle
       MYSQL_USER: ken
       MYSQL_PASSWORD: PT1K3n2023
