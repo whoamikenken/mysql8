@@ -5,16 +5,7 @@ services:
     build:
       context: ./           # Path to the directory containing the Dockerfile
       dockerfile: Dockerfile # Name of the Dockerfile
-    # restart: always
     volumes:
-      # - ./docker/my.cnf:/etc/my.cnf
-      # - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./data:/var/lib/mysql
     ports:
       - 33026:3306
-    environment:
-      MYSQL_ROOT_PASSWORD: passwrd
-      MYSQL_DATABASE: aims_laravel
-      MYSQL_USER: ken
-      MYSQL_PASSWORD: PT1K3n2023
-    # command: mysqld --default-authentication-plugin=mysql_native_password
