@@ -6,6 +6,9 @@ services:
       context: ./           # Path to the directory containing the Dockerfile
       dockerfile: Dockerfile # Name of the Dockerfile
     volumes:
-      - ./data:/var/lib/mysql
+      - db:/var/lib/mysql
     ports:
       - 33026:3306
+
+volumes:
+  db:
