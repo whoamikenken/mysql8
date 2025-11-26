@@ -5,6 +5,7 @@ services:
     build:
       context: ./           # Path to the directory containing the Dockerfile
       dockerfile: Dockerfile # Name of the Dockerfile
+    restart: unless-stopped
     volumes:
       - db:/var/lib/mysql
     ports:
